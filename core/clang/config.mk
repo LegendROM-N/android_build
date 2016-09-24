@@ -90,15 +90,7 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -Wunused-but-set-parameter \
   -Wunused-but-set-variable \
   -fdiagnostics-color \
-  -fdebug-prefix-map=/proc/self/cwd= \
-  -fgraphite \
-  -fgraphite-identity \
-  -floop-flatten \
-  -floop-parallelize-all \
-  -ftree-loop-linear \
-  -floop-interchange \
-  -floop-strip-mine \
-  -floop-block
+  -fdebug-prefix-map=/proc/self/cwd=
 
 # Clang flags for all host rules
 CLANG_CONFIG_HOST_EXTRA_ASFLAGS :=
@@ -113,10 +105,10 @@ CLANG_CONFIG_HOST_CROSS_EXTRA_CPPFLAGS :=
 CLANG_CONFIG_HOST_CROSS_EXTRA_LDFLAGS :=
 
 # Clang flags for all target rules
-CLANG_CONFIG_TARGET_EXTRA_ASFLAGS := -O3
-CLANG_CONFIG_TARGET_EXTRA_CFLAGS := -nostdlibinc -O3
-CLANG_CONFIG_TARGET_EXTRA_CPPFLAGS := -nostdlibinc -O3
-CLANG_CONFIG_TARGET_EXTRA_LDFLAGS := -O3
+CLANG_CONFIG_TARGET_EXTRA_ASFLAGS :=
+CLANG_CONFIG_TARGET_EXTRA_CFLAGS := -nostdlibinc
+CLANG_CONFIG_TARGET_EXTRA_CPPFLAGS := -nostdlibinc
+CLANG_CONFIG_TARGET_EXTRA_LDFLAGS :=
 
 CLANG_DEFAULT_UB_CHECKS := \
   bool \
