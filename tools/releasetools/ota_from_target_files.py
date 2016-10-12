@@ -649,6 +649,29 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("Target: %s" % CalculateFingerprint(
       oem_props, oem_dict, OPTIONS.info_dict))
 
+  script.Print("")
+  script.Print("       || THANK YOU FOR FLASHING ||        ")
+  script.Print("")
+  script.Print("LLLLLLLLLLL             RRRRRRRRRRRRRRRRR");
+  script.Print("L:::::::::L             R::::::::::::::::R");
+  script.Print("L:::::::::L             R::::::RRRRRR:::::R");
+  script.Print("LL:::::::LL             RR:::::R     R:::::R");
+  script.Print("  L:::::L                 R::::R     R:::::R");
+  script.Print("  L:::::L                 R::::R     R:::::R");
+  script.Print("  L:::::L                 R::::RRRRRR:::::R");
+  script.Print("  L:::::L                 R:::::::::::::RR");
+  script.Print("  L:::::L                 R::::RRRRRR:::::R");
+  script.Print("  L:::::L                 R::::R     R:::::R");
+  script.Print("  L:::::L                 R::::R     R:::::R");
+  script.Print("  L:::::L         LLLLLL  R::::R     R:::::R");
+  script.Print("LL:::::::LLLLLLLLL:::::LRR:::::R     R:::::R");
+  script.Print("L::::::::::::::::::::::LR::::::R     R:::::R");
+  script.Print("L::::::::::::::::::::::LR::::::R     R:::::R");
+  script.Print("LLLLLLLLLLLLLLLLLLLLLLLLRRRRRRRR     RRRRRRR");
+  script.Print("")
+  script.Print("          ||| ANDROID 7.0 |||           ")
+  script.Print("")
+
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
