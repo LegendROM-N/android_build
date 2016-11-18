@@ -223,11 +223,11 @@ my_sdclang := $(strip $(LOCAL_SDCLANG))
 # clang is enabled by default for host builds
 # enable it unless we've specifically disabled clang above
 ifdef LOCAL_IS_HOST_MODULE
-    ifneq ($($(my_prefix)OS),windows)
+  ifneq ($($(my_prefix)OS),windows)
     ifeq ($(my_clang),)
         my_clang := true
     endif
-    endif
+  endif
 # Add option to make gcc the default for device build
 else ifeq ($(USE_CLANG_PLATFORM_BUILD),false)
     ifeq ($(my_clang),)
@@ -261,7 +261,6 @@ endif
 
 my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 
-
 ifeq ($(SDCLANG),true)
     ifeq ($(my_sdclang),)
         ifeq ($(TARGET_USE_SDCLANG),true)
@@ -269,6 +268,8 @@ ifeq ($(SDCLANG),true)
         endif
     endif
 endif
+
+include $(BUILD_SYSTEM)/cmremix.mk
 
 # arch-specific static libraries go first so that generic ones can depend on them
 my_static_libraries := $(LOCAL_STATIC_LIBRARIES_$($(my_prefix)$(LOCAL_2ND_ARCH_VAR_PREFIX)ARCH)) $(LOCAL_STATIC_LIBRARIES_$(my_32_64_bit_suffix)) $(my_static_libraries)
@@ -368,6 +369,17 @@ my_target_global_conlyflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL
 my_target_global_cppflags += $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_CPPFLAGS)
 my_target_global_ldflags := $($(LOCAL_2ND_ARCH_VAR_PREFIX)CLANG_TARGET_GLOBAL_LDFLAGS)
     ifeq ($(my_sdclang),true)
+        SDCLANG_PRECONFIGURED_FLAGS := -Wno-vectorizer-no-neon -O3
+
+        ifeq ($(LOCAL_SDCLANG_LTO), true)
+        ifneq ($(LOCAL_MODULE_CLASS), STATIC_LIBRARIES)
+            SDCLANG_PRECONFIGURED_FLAGS += -fuse-ld=qcld -flto
+            my_target_global_ldflags += -fuse-ld=qcld -flto
+        endif
+        endif
+        my_target_global_cflags += $(SDCLANG_COMMON_FLAGS) $(SDCLANG_PRECONFIGURED_FLAGS)
+        SDCLANG_PRECONFIGURED_FLAGS :=
+
         ifeq ($(strip $(my_cc)),)
             my_cc := $(my_cc_wrapper) $(SDCLANG_PATH)/clang $(SDLLVM_AE_FLAG) -Wno-vectorizer-no-neon
         endif
@@ -625,7 +637,7 @@ endif
 
 # Turn on all warnings and warnings as errors for RS compiles.
 # This can be disabled with LOCAL_RENDERSCRIPT_FLAGS := -Wno-error
-renderscript_flags := -Wall -Werror
+# renderscript_flags := -Wall -Werror
 renderscript_flags += $(LOCAL_RENDERSCRIPT_FLAGS)
 # -m32 or -m64
 renderscript_flags += -m$(my_32_64_bit_suffix)
