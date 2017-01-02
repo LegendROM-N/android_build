@@ -77,11 +77,11 @@ function build_build_var_cache()
 function destroy_build_var_cache()
 {
     unset BUILD_VAR_CACHE_READY
-    for v in $cached_vars; do
+    for v in $(echo $cached_vars | tr " " "\n"); do
       unset var_cache_$v
     done
     unset cached_vars
-    for v in $cached_abs_vars; do
+    for v in $(echo $cached_abs_vars | tr " " "\n"); do
       unset abs_var_cache_$v
     done
     unset cached_abs_vars
@@ -132,11 +132,17 @@ function check_product()
         return
     fi
 
-    if (echo -n $1 | grep -q -e "^cm_") ; then
-       CM_BUILD=$(echo -n $1 | sed -e 's/^cm_//g')
-       export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+    if (echo -n $1 | grep -q -e "^lineage_") ; then
+        CM_BUILD=$(echo -n $1 | sed -e 's/^lineage_//g')
+        export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
-       CM_BUILD=
+        # Fall back to cm_<product>
+        if (echo -n $1 | grep -q -e "^cm_") ; then
+            CM_BUILD=$(echo -n $1 | sed -e 's/^cm_//g')
+            export BUILD_NUMBER=$((date +%s%N ; echo $CM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
+        else
+            CM_BUILD=
+        fi
     fi
     export CM_BUILD
 
@@ -629,7 +635,10 @@ function lunch()
         popd > /dev/null
         check_product $product
     else
+        T=$(gettop)
+        pushd $T > /dev/null
         vendor/cm/build/tools/roomservice.py $product true
+        popd > /dev/null
     fi
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
@@ -1717,4 +1726,4 @@ check_bash_version && {
 
 export ANDROID_BUILD_TOP=$(gettop)
 
-. vendor/cm/build/envsetup.sh
+. $ANDROID_BUILD_TOP/vendor/cm/build/envsetup.sh
