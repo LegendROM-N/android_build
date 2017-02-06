@@ -90,7 +90,15 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -Wunused-but-set-parameter \
   -Wunused-but-set-variable \
   -fdiagnostics-color \
-  -fdebug-prefix-map=/proc/self/cwd=
+  -fdebug-prefix-map=/proc/self/cwd= \
+  -fgraphite \
+  -fgraphite-identity \
+  -floop-flatten \
+  -floop-parallelize-all \
+  -ftree-loop-linear \
+  -floop-interchange \
+  -floop-strip-mine \
+  -floop-block
 
 # Clang flags for all host rules
 CLANG_CONFIG_HOST_EXTRA_ASFLAGS :=
