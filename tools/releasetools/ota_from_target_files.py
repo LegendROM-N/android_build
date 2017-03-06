@@ -1456,7 +1456,7 @@ class FileDifference(object):
       assert fn == tf.name
       sf = ClosestFileMatch(tf, matching_file_cache, renames)
       if sf is not None and sf.name != tf.name:
-        print "File has moved from " + sf.name + " to " + tf.name)
+        print "File has moved from " + sf.name + " to " + tf.name
         renames[sf.name] = tf
 
       if sf is None or fn in OPTIONS.require_verbatim:
@@ -1551,7 +1551,7 @@ class FileDifference(object):
     if len(self.renames) > 0:
       script.Print("Renaming files...")
       for src, tgt in self.renames.iteritems():
-        print "Renaming " + src + " to " + tgt.name)
+        print "Renaming " + src + " to " + tgt.name
         script.RenameFile(src, tgt.name)
 
 
