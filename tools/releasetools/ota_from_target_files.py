@@ -712,7 +712,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("L::::::::::::::::::::::LR::::::R     R:::::R");
   script.Print("LLLLLLLLLLLLLLLLLLLLLLLLRRRRRRRR     RRRRRRR");
   script.Print("")
-  script.Print("          ||| ANDROID 7.1.1 |||           ")
+  script.Print("          ||| ANDROID 7.1.2 |||           ")
   script.Print("")
 
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
