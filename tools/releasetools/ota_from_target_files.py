@@ -714,6 +714,60 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("")
   script.Print("          ||| ANDROID 7.1.2 |||           ")
   script.Print("")
+  script.Print(" ")
+
+  if GetBuildProp("ro.legendrom.version", OPTIONS.info_dict) is not None:
+    buildid = GetBuildProp("ro.legendrom.version", OPTIONS.info_dict)
+    buildtype = GetBuildProp("lr.build.type", OPTIONS.info_dict)
+    buildidn = GetBuildProp("ro.build.id", OPTIONS.info_dict)
+    buildday = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+    securep = GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
+    buildhst = GetBuildProp("ro.build.host", OPTIONS.info_dict)
+    density = GetBuildProp("ro.sf.lcd_density", OPTIONS.info_dict)
+    device = GetBuildProp("ro.lr.device", OPTIONS.info_dict)
+    androidver = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
+    maintainer = GetBuildProp("ro.build.user", OPTIONS.info_dict)
+    sdkver = GetBuildProp("ro.build.version.sdk", OPTIONS.info_dict)
+    script.Print(" **************** Software *****************");
+    script.Print(" OS ver: %s"%(buildid));
+    script.Print("");
+    script.Print(" Android ver: %s"%(androidver));
+    script.Print("");
+    script.Print(" Security patch: %s"%(securep));
+    script.Print("");
+    script.Print(" SDK ver: %s"%(sdkver));
+    script.Print("");
+    script.Print(" Root status: Enabled");
+    script.Print("");
+    script.Print(" Build ID: %s"%(buildidn));
+    script.Print("");
+    script.Print(" Build date: %s"%(buildday));
+    script.Print("");
+    script.Print(" Build type: %s"%(buildtype));
+    script.Print("");
+    script.Print(" Build host: %s"%(buildhst));
+    script.Print("");
+    script.Print(" Maintainer: %s"%(maintainer));
+    script.Print(" **************** Hardware *****************");
+    script.Print(" Device codename: %s"%(device));
+    script.Print("");
+    script.Print(" LCD density: %s"%(density));
+    script.Print("");
+    script.Print(" *******************************************");
+
+  if OPTIONS.wipe_user_data:
+    system_progress -= 0.1
+  if HasVendorPartition(input_zip):
+    system_progress -= 0.1
+
+  if not OPTIONS.wipe_user_data:
+    script.AppendExtra("if is_mounted(\"/data\") then")
+    script.ValidateSignatures("data")
+    script.AppendExtra("else")
+    script.Mount("/data")
+    script.ValidateSignatures("data")
+    script.Unmount("/data")
+    script.AppendExtra("endif;")
 
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
@@ -729,20 +783,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Unmount("/system")
 
   system_progress = 0.75
-
-  if OPTIONS.wipe_user_data:
-    system_progress -= 0.1
-  if HasVendorPartition(input_zip):
-    system_progress -= 0.1
-
-  if not OPTIONS.wipe_user_data:
-    script.AppendExtra("if is_mounted(\"/data\") then")
-    script.ValidateSignatures("data")
-    script.AppendExtra("else")
-    script.Mount("/data")
-    script.ValidateSignatures("data")
-    script.Unmount("/data")
-    script.AppendExtra("endif;")
 
   # Place a copy of file_contexts.bin into the OTA package which will be used
   # by the recovery program.
