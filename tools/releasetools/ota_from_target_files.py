@@ -871,6 +871,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                    ""+input_zip.read("SYSTEM/addon.d/magisk.zip"))
     script.FlashMagisk()
     script.Print(" ")
+
+    script.Print(" ")
+    script.Print("Flashing Deuteronomy Sound System...")
+    script.Print(" ")
+    common.ZipWriteStr(output_zip, "viper/viper.zip",
+                   ""+input_zip.read("SYSTEM/addon.d/viper.zip"))
+    script.FlashViper()
+    script.Print("Deuteronomy Flashed...")
+    script.Print(" ")
   script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
 
